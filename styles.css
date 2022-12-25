@@ -27,7 +27,7 @@ body {
 }
 
 .container {
-    border: 2px solid blue;
+    /* border: 2px solid blue; */
     width: 100%;
     height: 100%;
     display: flex;
@@ -37,7 +37,7 @@ body {
 }
 
 .header {
-    border: 2px solid green;
+    /* border: 2px solid green; */
     width: 100%;
     height: 10%;
     display: flex;
@@ -91,7 +91,7 @@ body {
 .play-container {
     width: 1200px;
     height: 100%;
-    border: 2px dotted orange;
+    /* border: 2px dotted orange; */
     display: flex;
     flex-flow: column nowrap;
     justify-content: space-between;
@@ -100,7 +100,7 @@ body {
 
 .play-top {
     min-height: 150px;
-    border: 2px solid blue;
+    /* border: 2px solid blue; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,23 +116,32 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
+    overflow: hidden;
 }
 
 .play-bottom {
     min-height: 150px;
-    border: 2px solid green;
+    /* border: 2px solid green; */
 }
 
 #pacman {
     height: 280px;
     width: 280px;
-    background-color: var(--pacman-color);
-    border-radius: 50%;
+    /* background-color: var(--pacman-color); */
+    background-position: -5px;
+    background-size: 110%;
     display: flex;
     justify-content: center;
     align-items: center;
     color: black;
     position: absolute;
+    animation: chomp .1s linear infinite alternate;
+}
+
+@keyframes chomp {
+    0%, 32% {background-image: url('images/pacman_middle.gif');}
+    33%, 65% {background-image: url('images/pacman_right_2.gif');}
+    66%, 100% {background-image: url('images/pacman_right_3.gif');}
 }
 
 #ghost {
@@ -157,7 +166,7 @@ body {
     color: black;
     padding: 5px;
     z-index: 10;
-    width: 200px;
+    width: 250px;
 }
 
 #debug * {

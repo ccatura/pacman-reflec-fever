@@ -1,30 +1,48 @@
 var $gameStarted = false;
-var $pacmanDirection = 'left';
-var $energized = false;
-var $ghostPresent = false;
-var $ghostDirection = 'right';
 var $score = 0;
+var $energized = false;
+var $dead = false;
+var $pacmanDirection = 'left';
+var $ghostPresent = false;
+var $ghostPersonas = ['blinky', 'pinky', 'inky', 'clyde'];
+var $ghostDirection = 'right';
 var $attackInterval = 3000;
 var $pacmanLeftBound = $('#pacman').position().left;
-var $pacmanRightBound = getRight($('#pacman'));
+var $pacmanRightBound = getRightBound($('#pacman'));
 var $ghostLeftBound;
 var $ghostRightBound;
-var ghostSpeed = 5000;
-var $overlap = 20;
-var $dead = false;
+var $ghostSpeed = 5;
+var $overlap = 60;
 var $ghostSide = 'left';
-var $ghostPos = 0 - $('#ghost').width() - 50;
+var $ghostOverPos = 300;
+var $ghostPos = -$ghostOverPos;
 
-
+// Set ghost initial position
 $('#ghost').css('left', $ghostPos);
 
+stopPacman();
 
 
 $(document).keydown(function(e){
-    switch(e.which) {
-        case 37: $pacmanDirection = 'left'; break;
-        case 39: $pacmanDirection = 'right'; break;
-        case 83: $gameStarted = true; break;
+    
+    if(!$dead) {
+        switch(e.which) {
+            case 37: {
+                $pacmanDirection = 'left';
+                $('#pacman').css('transform', 'scaleX(-1)');
+                break;
+            }
+            case 39: {
+                $pacmanDirection = 'right';
+                $('#pacman').css('transform', 'scaleX(1)');
+                break;
+            }
+            case 83: {
+                $gameStarted = true;
+                startPacman();
+                break;
+            }
+        }
     }
 
     if($pacmanDirection == 'left') {
@@ -46,9 +64,22 @@ $(document).keydown(function(e){
 
 
 
+function dead() {
+    $dead = true;
+    $('.play-top').text('Game Over');
+    $('.play-top').css('color', 'red');
+    stopPacman();
+}
 
+function stopPacman() {
+    $('#pacman').css('animation-play-state', 'paused');
+}
 
-function getRight(left) {
+function startPacman() {
+    $('#pacman').css('animation-play-state', 'running');
+}
+
+function getRightBound(left) {
     return left.position().left + left.width();        
 }
 
@@ -58,12 +89,13 @@ function updateDebug() {
     $('#debug #ghost-present').text('Ghost Dir: ' + $ghostPresent);
     $('#debug #ghost-dir').text('Ghost Dir: ' + $ghostDirection);
     $('#debug #game-started').text('Game Started: ' + $gameStarted);
-    $('#pacman').text($pacmanDirection);
+    // $('#pacman').text($pacmanDirection);
     $('#ghost').text($ghostDirection);
     $('#debug #ghost-left-bound').text('Ghost Left Bound: ' + parseInt($ghostLeftBound));
     $('#debug #ghost-right-bound').text('Ghost Right Bound: ' + parseInt($ghostRightBound));
     $('#debug #pacman-left-bound').text('Pacman Left Bound: ' + $pacmanLeftBound);
     $('#debug #pacman-right-bound').text('Pacman Right Bound: ' + $pacmanRightBound);
+    $('#debug #ghost-present').text('Ghost Present: ' + $ghostPresent);
     $('#debug #dead').text('Pacman Dead: ' + $dead);
     $('#score').text($score);
 }
@@ -71,31 +103,73 @@ function updateDebug() {
 function moveGhost() {
     // Get ghost coords
     $ghostLeftBound = $('#ghost').position().left;
-    $ghostRightBound = getRight($('#ghost'));
+    $ghostRightBound = getRightBound($('#ghost'));
 
-    // if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostLeftBound > $pacmanRightBound && !$('#ghost').is(':animated')) {
-    //     $('#ghost').css('left', $('.play-middle').width());
-    //     $('#ghost').animate({left: '50%'}, 5000, 'linear');
-    //     console.log('hi');
-    // }
+    // Move ghost towards right if pacman is facing left and ghost is on the left
+    if($gameStarted && $pacmanDirection == 'left' && $dead == false && $ghostRightBound < ($pacmanLeftBound + $overlap) && $ghostSide == 'left' && $ghostPresent == true) {
+        $('#ghost').css('left', $ghostPos);
+        $ghostPos += $ghostSpeed;
+    }
 
-    // Move ghost towards right if pacman is facing left
-    if($gameStarted && $pacmanDirection == 'left' && $dead == false && $ghostRightBound < $pacmanLeftBound && !$('#ghost').is(':animated')) {
-        $('#ghost').animate({left: '50%'}, 5000, 'linear');
+    // Move ghost towards left if pacman is facing right and ghost is on the left
+    if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostSide == 'left' && $ghostPresent == true) {
+        $('#ghost').css('left', $ghostPos);
+        if($ghostPos > (-$ghostOverPos)) {
+            $ghostPos -= $ghostSpeed / 3;
+        } else if ($ghostPos <= (-$ghostOverPos)) {
+            $ghostPresent = false;
+        }
+    }
+}
+
+function faceDirection() {
+    if($pacmanDirection == 'left') {
+        $('#pacman').css('transform', 'scaleX(-1)');
+    } else {
+        $('#pacman').css('transform', 'scaleX(1)');
     }
 }
 
 function checkCollision() {
-    if($pacmanDirection == 'left' && $ghostRightBound - $overlap > $pacmanLeftBound) {
-        $('#ghost').stop();
-        $dead = true;
-        $('.play-top').text('Game Over');
-        $('.play-top').css('color', 'red');
+    if ($ghostRightBound >= ($pacmanLeftBound + $overlap)) {
+        dead();
+        // resetGame();
     }
+}
+
+function resetGame() {
+    $gameStarted = false;
+    $score = 0;
+    $energized = false;
+    $dead = false;
+    $pacmanDirection = 'left';
+    $ghostPresent = false;
+    $ghostDirection = 'right';
+    $attackInterval = 3000;
+    $ghostSpeed = 2;
+    $overlap = 20;
+    $ghostSide = 'left';
+
+    // Set ghost initial position
+    $('#ghost').css('left', $ghostPos);
+
+    stopPacman();
 }
 
 $(document).ready(function() {
     setInterval(updateDebug, 10);
-    setInterval(moveGhost, 10)
-    // setInterval(checkCollision, 10);
+    setInterval(moveGhost, 10);
+    setInterval(faceDirection, 10);
+
+    if($ghostPresent == false) {
+        setInterval(() => {
+            if($gameStarted) $ghostPresent = true;
+        }, $attackInterval);
+    }
+
+    setInterval(() => {
+        if($gameStarted) checkCollision();
+    }, 10);
+
+
 });
