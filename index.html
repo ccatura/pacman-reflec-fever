@@ -6,9 +6,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="scripts.js" defer></script>
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style> @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>Pacm-Man Reflex Fever</title>
 </head>
 <body>
     
+<div class="container">
+    <div class="header">
+        <div class="score-container">
+            <div>1up</div>
+            <div id="score">0</div>
+        </div>
+        <div class="high-score-container">
+            <div>High Score</div>
+            <div>0</div>
+        </div>
+        <div class="info-container">
+            <img src="images/blue-ghost.png">
+        </div>
+    </div>
+    <div class="play-container">
+        <div class="play-top">Ready!</div>
+        <div class="play-middle">
+            <div id="ghost"></div>
+            <div id="pacman"></div>
+        </div>
+        <div class="play-bottom"></div>
+    </div>
+
+    <div id="debug">
+        <div>Debug</div>
+        <div id="pac-dir"></div>
+        <div id="energized"></div>
+        <div id="ghost-present"></div>
+        <div id="ghost-dir"></div>
+        <div id="game-started"></div>
+        <br>
+        <div id="ghost-left-bound"></div>
+        <div id="ghost-right-bound"></div>
+        <br>
+        <div id="pacman-left-bound"></div>
+        <div id="pacman-right-bound"></div>
+        <br>
+        <div id="dead"></div>
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </body>
 </html>
