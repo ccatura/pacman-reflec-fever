@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
     <style> @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'); </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <title>Pacm-Man Reflex Fever</title>
+    <title>Pac-Man Reflex Fever (jQuery Version)</title>
 </head>
 <body>
     
@@ -30,7 +30,7 @@
     <div class="play-container">
         <div class="play-top">Ready!</div>
         <div class="play-middle">
-            <div id="ghost"></div>
+            <div id="ghost" class="blinky"></div>
             <div id="pacman"></div>
         </div>
         <div class="play-bottom"></div>
@@ -45,6 +45,8 @@
         <div id="game-started"></div>
         <br>
         <div id="ghost-present"></div>
+        <div id="ghost-name"></div>
+        <div id="ghost-side"></div>
         <div id="ghost-left-bound"></div>
         <div id="ghost-right-bound"></div>
         <br>

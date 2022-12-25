@@ -16,6 +16,7 @@ var $overlap = 60;
 var $ghostSide = 'left';
 var $ghostOverPos = 300;
 var $ghostPos = -$ghostOverPos;
+var $ghostName;
 
 // Set ghost initial position
 $('#ghost').css('left', $ghostPos);
@@ -40,6 +41,10 @@ $(document).keydown(function(e){
             case 83: {
                 $gameStarted = true;
                 startPacman();
+                break;
+            }
+            case 81: {
+                $('#debug').toggle();
                 break;
             }
         }
@@ -83,6 +88,11 @@ function getRightBound(left) {
     return left.position().left + left.width();        
 }
 
+function pickGhost() {
+    r = $ghostPersonas[Math.floor(Math.random() * 4)];
+    return r;
+}
+
 function updateDebug() {
     $('#debug #pac-dir').text('Pac Dir: ' + $pacmanDirection);
     $('#debug #energized').text('Energized: ' + $energized);
@@ -90,13 +100,15 @@ function updateDebug() {
     $('#debug #ghost-dir').text('Ghost Dir: ' + $ghostDirection);
     $('#debug #game-started').text('Game Started: ' + $gameStarted);
     // $('#pacman').text($pacmanDirection);
-    $('#ghost').text($ghostDirection);
+    // $('#ghost').text($ghostDirection);
     $('#debug #ghost-left-bound').text('Ghost Left Bound: ' + parseInt($ghostLeftBound));
     $('#debug #ghost-right-bound').text('Ghost Right Bound: ' + parseInt($ghostRightBound));
     $('#debug #pacman-left-bound').text('Pacman Left Bound: ' + $pacmanLeftBound);
     $('#debug #pacman-right-bound').text('Pacman Right Bound: ' + $pacmanRightBound);
     $('#debug #ghost-present').text('Ghost Present: ' + $ghostPresent);
+    $('#debug #ghost-side').text('Ghost Side: ' + $ghostSide);
     $('#debug #dead').text('Pacman Dead: ' + $dead);
+    $('#debug #ghost-name').text('Ghost: ' + $ghostName);
     $('#score').text($score);
 }
 
@@ -127,6 +139,12 @@ function faceDirection() {
         $('#pacman').css('transform', 'scaleX(-1)');
     } else {
         $('#pacman').css('transform', 'scaleX(1)');
+    }
+
+    if($ghostSide == 'left') {
+        $('#ghost').css('transform', 'scaleX(1)');
+    } else {
+        $('#ghost').css('transform', 'scaleX(-1)');
     }
 }
 
@@ -171,5 +189,11 @@ $(document).ready(function() {
         if($gameStarted) checkCollision();
     }, 10);
 
+    setInterval(() => {
+        if(!$ghostPresent) {
+            $ghostName = pickGhost();
+        }
+        $('#ghost').css("animation-name", $ghostName );
+    }, 1000);
 
 });

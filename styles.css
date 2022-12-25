@@ -127,9 +127,8 @@ body {
 #pacman {
     height: 280px;
     width: 280px;
-    /* background-color: var(--pacman-color); */
-    background-position: -5px;
-    background-size: 110%;
+    background-position: center;
+    background-size: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -139,16 +138,16 @@ body {
 }
 
 @keyframes chomp {
-    0%, 32% {background-image: url('images/pacman_middle.gif');}
-    33%, 65% {background-image: url('images/pacman_right_2.gif');}
-    66%, 100% {background-image: url('images/pacman_right_3.gif');}
+    0%, 32% {background-image: url('images/pacman-closed.png');}
+    33%, 65% {background-image: url('images/pacman-open.png');}
+    66%, 100% {background-image: url('images/pacman-wide.png');}
 }
 
 #ghost {
     height: 280px;
     width: 280px;
-    background-color: var(--blinky-color);
-    border-radius: 5%;
+    background-position: center;
+    background-size: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -156,9 +155,31 @@ body {
     position: absolute;
     left: 0;
     z-index: 2;
+    animation: pinky .2s linear infinite alternate;
+}
+
+@keyframes blinky {
+    0%, 49% {background-image: url('images/blinky1.png');}
+    50%, 99% {background-image: url('images/blinky2.png');}
+}
+
+@keyframes pinky {
+    0%, 49% {background-image: url('images/pinky1.png');}
+    50%, 99% {background-image: url('images/pinky2.png');}
+}
+
+@keyframes inky {
+    0%, 49% {background-image: url('images/inky1.png');}
+    50%, 99% {background-image: url('images/inky2.png');}
+}
+
+@keyframes clyde {
+    0%, 49% {background-image: url('images/clyde1.png');}
+    50%, 99% {background-image: url('images/clyde2.png');}
 }
 
 #debug {
+    display: none;
     position: absolute;
     bottom: 20px;
     right: 20px;
