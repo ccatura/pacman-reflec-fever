@@ -76,9 +76,14 @@ body {
     align-items: center;
 }
 
-.info-container img {
+#little-ghost {
     height: 80%;
-    animation: blink .5s linear infinite normal forwards;
+    background-size: 100%;
+    background-position: center;
+    width: 70px;
+    height: 70px;
+    transform: scaleX(-1);
+    animation: blinky .2s linear infinite alternate;
 }
 
 @keyframes blink {
@@ -155,7 +160,7 @@ body {
     position: absolute;
     left: 0;
     z-index: 2;
-    animation: pinky .2s linear infinite alternate;
+    animation: blinky .2s linear infinite alternate;
 }
 
 @keyframes blinky {

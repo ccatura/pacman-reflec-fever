@@ -6,7 +6,7 @@ var $pacmanDirection = 'left';
 var $ghostPresent = false;
 var $ghostPersonas = ['blinky', 'pinky', 'inky', 'clyde'];
 var $ghostDirection = 'right';
-var $attackInterval = 3000;
+var $attackInterval = 1000;
 var $pacmanLeftBound = $('#pacman').position().left;
 var $pacmanRightBound = getRightBound($('#pacman'));
 var $ghostLeftBound;
@@ -15,7 +15,7 @@ var $ghostSpeed = 5;
 var $overlap = 60;
 var $ghostSide = 'left';
 var $ghostOverPos = 300;
-var $ghostPos = -$ghostOverPos;
+var $ghostPos = -$ghostOverPos; //starting ghost position
 var $ghostName;
 
 // Set ghost initial position
@@ -30,12 +30,10 @@ $(document).keydown(function(e){
         switch(e.which) {
             case 37: {
                 $pacmanDirection = 'left';
-                $('#pacman').css('transform', 'scaleX(-1)');
                 break;
             }
             case 39: {
                 $pacmanDirection = 'right';
-                $('#pacman').css('transform', 'scaleX(1)');
                 break;
             }
             case 83: {
@@ -99,8 +97,6 @@ function updateDebug() {
     $('#debug #ghost-present').text('Ghost Dir: ' + $ghostPresent);
     $('#debug #ghost-dir').text('Ghost Dir: ' + $ghostDirection);
     $('#debug #game-started').text('Game Started: ' + $gameStarted);
-    // $('#pacman').text($pacmanDirection);
-    // $('#ghost').text($ghostDirection);
     $('#debug #ghost-left-bound').text('Ghost Left Bound: ' + parseInt($ghostLeftBound));
     $('#debug #ghost-right-bound').text('Ghost Right Bound: ' + parseInt($ghostRightBound));
     $('#debug #pacman-left-bound').text('Pacman Left Bound: ' + $pacmanLeftBound);
@@ -122,13 +118,27 @@ function moveGhost() {
         $('#ghost').css('left', $ghostPos);
         $ghostPos += $ghostSpeed;
     }
-
     // Move ghost towards left if pacman is facing right and ghost is on the left
     if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostSide == 'left' && $ghostPresent == true) {
         $('#ghost').css('left', $ghostPos);
-        if($ghostPos > (-$ghostOverPos)) {
+        if($ghostPos > (-300)) {
             $ghostPos -= $ghostSpeed / 3;
-        } else if ($ghostPos <= (-$ghostOverPos)) {
+        } else if ($ghostPos <= (-300)) {
+            $ghostPresent = false;
+        }
+    }
+
+    // Move ghost towards left if pacman is facing right and ghost is on the right
+    if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostLeftBound > ($pacmanRightBound - $overlap) && $ghostSide == 'right' && $ghostPresent == true) {
+        $('#ghost').css('left', $ghostPos);
+        $ghostPos -= $ghostSpeed;
+    }
+    // Move ghost towards right if pacman is facing left and ghost is on the right
+    if($gameStarted && $pacmanDirection == 'left' && $dead == false && $ghostSide == 'right' && $ghostPresent == true) {
+        $('#ghost').css('left', $ghostPos);
+        if($ghostPos < (1500)) {
+            $ghostPos += $ghostSpeed / 3;
+        } else if ($ghostPos >= (1500)) {
             $ghostPresent = false;
         }
     }
@@ -149,10 +159,10 @@ function faceDirection() {
 }
 
 function checkCollision() {
-    if ($ghostRightBound >= ($pacmanLeftBound + $overlap)) {
-        dead();
-        // resetGame();
-    }
+    // if ($ghostDirection == 'right' && $ghostSide == 'left' && $ghostRightBound >= ($pacmanLeftBound + $overlap)) {
+    //     dead();
+    //     // resetGame();
+    // }
 }
 
 function resetGame() {
@@ -163,7 +173,6 @@ function resetGame() {
     $pacmanDirection = 'left';
     $ghostPresent = false;
     $ghostDirection = 'right';
-    $attackInterval = 3000;
     $ghostSpeed = 2;
     $overlap = 20;
     $ghostSide = 'left';
@@ -181,8 +190,10 @@ $(document).ready(function() {
 
     if($ghostPresent == false) {
         setInterval(() => {
-            if($gameStarted) $ghostPresent = true;
-        }, $attackInterval);
+            setTimeout(() => {
+                if($gameStarted) $ghostPresent = true;
+            }, $attackInterval);
+        }, 4000);
     }
 
     setInterval(() => {
@@ -190,10 +201,27 @@ $(document).ready(function() {
     }, 10);
 
     setInterval(() => {
+        if($pacmanDirection == 'left' && !$ghostPresent) {
+            $ghostSide = 'left';
+            $ghostPos = -300;
+        } else if($pacmanDirection == 'right' && !$ghostPresent) {
+            $ghostSide = 'right';
+            $ghostPos = 1500;
+        }
+        $('#ghost').css('left', $ghostPos);
+    }, 10);
+    
+    // Picks ghost
+    setInterval(() => {
         if(!$ghostPresent) {
             $ghostName = pickGhost();
         }
-        $('#ghost').css("animation-name", $ghostName );
+        $('#ghost, #little-ghost').css("animation-name", $ghostName );
     }, 1000);
 
 });
+
+
+
+
+
