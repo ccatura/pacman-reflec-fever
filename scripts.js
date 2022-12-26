@@ -14,7 +14,7 @@ var $ghostRightBound;
 var $ghostSpeed = 5;
 var $overlap = 60;
 var $ghostSide = 'left';
-var $ghostOverPos = 300;
+var $ghostOverPos = 500;
 var $ghostPos = -$ghostOverPos; //starting ghost position
 var $ghostName;
 
@@ -94,7 +94,6 @@ function pickGhost() {
 function updateDebug() {
     $('#debug #pac-dir').text('Pac Dir: ' + $pacmanDirection);
     $('#debug #energized').text('Energized: ' + $energized);
-    $('#debug #ghost-present').text('Ghost Dir: ' + $ghostPresent);
     $('#debug #ghost-dir').text('Ghost Dir: ' + $ghostDirection);
     $('#debug #game-started').text('Game Started: ' + $gameStarted);
     $('#debug #ghost-left-bound').text('Ghost Left Bound: ' + parseInt($ghostLeftBound));
@@ -121,10 +120,11 @@ function moveGhost() {
     // Move ghost towards left if pacman is facing right and ghost is on the left
     if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostSide == 'left' && $ghostPresent == true) {
         $('#ghost').css('left', $ghostPos);
-        if($ghostPos > (-300)) {
+        if($ghostPos > (-500)) {
             $ghostPos -= $ghostSpeed / 3;
-        } else if ($ghostPos <= (-300)) {
+        } else if ($ghostPos <= (-500)) {
             $ghostPresent = false;
+            $('#little-ghost').fadeOut(500);
         }
     }
 
@@ -140,6 +140,7 @@ function moveGhost() {
             $ghostPos += $ghostSpeed / 3;
         } else if ($ghostPos >= (1500)) {
             $ghostPresent = false;
+            $('#little-ghost').fadeOut(500);
         }
     }
 }
@@ -191,7 +192,10 @@ $(document).ready(function() {
     if($ghostPresent == false) {
         setInterval(() => {
             setTimeout(() => {
-                if($gameStarted) $ghostPresent = true;
+                if($gameStarted) {
+                    $ghostPresent = true;
+                    $('#little-ghost').fadeIn(500);
+                }
             }, $attackInterval);
         }, 4000);
     }
@@ -203,7 +207,7 @@ $(document).ready(function() {
     setInterval(() => {
         if($pacmanDirection == 'left' && !$ghostPresent) {
             $ghostSide = 'left';
-            $ghostPos = -300;
+            $ghostPos = -500;
         } else if($pacmanDirection == 'right' && !$ghostPresent) {
             $ghostSide = 'right';
             $ghostPos = 1500;
