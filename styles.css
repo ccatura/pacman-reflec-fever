@@ -1,5 +1,6 @@
 :root {
-    --background-color: black;
+    --background-color: #111;
+    --background-play-color: black;
     --body-copy-color: white;
     --pieces-color: blue;
     --pacman-color: yellow;
@@ -97,6 +98,7 @@ body {
 .play-container {
     width: 1200px;
     height: 100%;
+    background-color: var(--background-play-color);
     /* border: 2px dotted orange; */
     display: flex;
     flex-flow: column nowrap;
@@ -166,22 +168,22 @@ body {
 
 @keyframes blinky {
     0%, 49% {background-image: url('images/blinky1.png');}
-    50%, 99% {background-image: url('images/blinky2.png');}
+    50%, 100% {background-image: url('images/blinky2.png');}
 }
 
 @keyframes pinky {
     0%, 49% {background-image: url('images/pinky1.png');}
-    50%, 99% {background-image: url('images/pinky2.png');}
+    50%, 100% {background-image: url('images/pinky2.png');}
 }
 
 @keyframes inky {
     0%, 49% {background-image: url('images/inky1.png');}
-    50%, 99% {background-image: url('images/inky2.png');}
+    50%, 100% {background-image: url('images/inky2.png');}
 }
 
 @keyframes clyde {
     0%, 49% {background-image: url('images/clyde1.png');}
-    50%, 99% {background-image: url('images/clyde2.png');}
+    50%, 100% {background-image: url('images/clyde2.png');}
 }
 
 #debug {
@@ -200,4 +202,21 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     text-transform: none;
     font-size: .7em;
+}
+
+.dot-container {
+    width: 500px;
+    height: 30px;
+    /* border: 10px dotted red; */
+    position: absolute;
+    top: 45%;
+    left: 0;
+}
+
+.dot {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    position: absolute;
+    top: 50%;
 }

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background-color: black;
+        }
+
+        .dot-container {
+            width: 500px;
+            height: 200px;
+            border: 10px dotted red;
+            position: relative;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: white;
+            position: absolute;
+            top: 50%;
+        }
+    </style>
+</head>
+<body>
+
+
+
+
+
+<div class="dot-container">
+	<div class="dot"></div>
+</div>
+
+
+
+
+
+
+<script defer>
+function createDots() {
+    var dot = document.getElementsByClassName('dot');
+    var dotContainer = document.querySelector('.dot-container');
+    var dotQuantity = 6;
+    var dotContainerWidth = document.querySelector('.dot-container').clientWidth;
+    var dotDistance = dotContainerWidth / dotQuantity;
+    var dotClone = [];
+    var dotSpeed = 1;
+    var dotInterval = 200;
+    var dotContainerOffset = 0;
+
+    for(var a = 0; a < dotQuantity - 1; a++) {
+        dotClone[a] = dot[0].cloneNode(true);
+    }
+
+    var pos = 0;
+    for(var a = 0; a < dotQuantity - 1; a++) {
+        dot[a].after(dotClone[a]);
+        dot[a].style.left = pos + 'px';
+        pos += dotDistance;
+    }
+}
+
+createDots();
+
+
+    function moveDots() {
+        if(dotContainerOffset <= dotDistance) {
+            dotContainerOffset += dotSpeed;
+        } else {
+            dotContainerOffset = 0;
+        }
+        dotContainer.style.transform = 'translateX(' + a + 'px)';
+    }
+
+
+    setInterval(moveDots, 1000);
+
+
+</script>
+
+
+
+
+
+    
+</body>
+</html>

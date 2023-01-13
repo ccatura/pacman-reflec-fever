@@ -11,12 +11,23 @@ var $pacmanLeftBound = $('#pacman').position().left;
 var $pacmanRightBound = getRightBound($('#pacman'));
 var $ghostLeftBound;
 var $ghostRightBound;
-var $ghostSpeed = 5;
+var $speed = 5;
+var $dotSpeed = $speed / 2;
 var $overlap = 60;
 var $ghostSide = 'left';
 var $ghostOverPos = 500;
 var $ghostPos = -$ghostOverPos; //starting ghost position
 var $ghostName;
+
+var $dot = document.getElementsByClassName('dot');
+var $dotContainer = document.querySelector('.dot-container');
+var $dotQuantity = 6;
+var $dotContainerWidth = document.querySelector('.dot-container').clientWidth;
+var $dotDistance = $dotContainerWidth / $dotQuantity;
+var $dotClone = [];
+var $dotInterval = 200;
+var $dotContainerOffset = 0;
+
 
 // Set ghost initial position
 $('#ghost').css('left', $ghostPos);
@@ -107,7 +118,7 @@ function updateDebug() {
     $('#score').text($score);
 }
 
-function moveGhost() {
+function moveElements() {
     // Get ghost coords
     $ghostLeftBound = $('#ghost').position().left;
     $ghostRightBound = getRightBound($('#ghost'));
@@ -115,13 +126,13 @@ function moveGhost() {
     // Move ghost towards right if pacman is facing left and ghost is on the left
     if($gameStarted && $pacmanDirection == 'left' && $dead == false && $ghostRightBound < ($pacmanLeftBound + $overlap) && $ghostSide == 'left' && $ghostPresent == true) {
         $('#ghost').css('left', $ghostPos);
-        $ghostPos += $ghostSpeed;
+        $ghostPos += $speed;
     }
     // Move ghost towards left if pacman is facing right and ghost is on the left
     if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostSide == 'left' && $ghostPresent == true) {
         $('#ghost').css('left', $ghostPos);
         if($ghostPos > (-500)) {
-            $ghostPos -= $ghostSpeed / 3;
+            $ghostPos -= $speed / 3;
         } else if ($ghostPos <= (-500)) {
             $ghostPresent = false;
             $('#little-ghost').fadeOut(500);
@@ -131,25 +142,31 @@ function moveGhost() {
     // Move ghost towards left if pacman is facing right and ghost is on the right
     if($gameStarted && $pacmanDirection == 'right' && $dead == false && $ghostLeftBound > ($pacmanRightBound - $overlap) && $ghostSide == 'right' && $ghostPresent == true) {
         $('#ghost').css('left', $ghostPos);
-        $ghostPos -= $ghostSpeed;
+        $ghostPos -= $speed;
     }
     // Move ghost towards right if pacman is facing left and ghost is on the right
     if($gameStarted && $pacmanDirection == 'left' && $dead == false && $ghostSide == 'right' && $ghostPresent == true) {
         $('#ghost').css('left', $ghostPos);
         if($ghostPos < (1500)) {
-            $ghostPos += $ghostSpeed / 3;
+            $ghostPos += $speed / 3;
         } else if ($ghostPos >= (1500)) {
             $ghostPresent = false;
             $('#little-ghost').fadeOut(500);
         }
     }
+
+    
+
+
 }
 
 function faceDirection() {
     if($pacmanDirection == 'left') {
         $('#pacman').css('transform', 'scaleX(-1)');
+        // if($dotSpeed < 0) $dotSpeed *= -1;
     } else {
         $('#pacman').css('transform', 'scaleX(1)');
+        // if($dotSpeed > 0) $dotSpeed *= -1;
     }
 
     if($ghostSide == 'left') {
@@ -174,7 +191,7 @@ function resetGame() {
     $pacmanDirection = 'left';
     $ghostPresent = false;
     $ghostDirection = 'right';
-    $ghostSpeed = 2;
+    $speed = 2;
     $overlap = 20;
     $ghostSide = 'left';
 
@@ -184,9 +201,33 @@ function resetGame() {
     stopPacman();
 }
 
+function createDots() {
+    for(var a = 0; a < $dotQuantity; a++) {
+        $dotClone[a] = $dot[0].cloneNode(true);
+    }
+
+    var $pos = 0;
+    for(var a = 0; a < $dotQuantity; a++) {
+        $dot[a].after($dotClone[a]);
+        $dot[a].style.left = $pos + 'px';
+        $pos += $dotDistance;
+   }
+}
+
+function moveDots() {
+    if($dotContainerOffset <= $dotDistance) {
+        $dotContainerOffset+= $dotSpeed;
+    } else {
+        $dotContainerOffset = 0;
+    }
+    $dotContainer.style.transform = 'translateX(' + $dotContainerOffset + 'px)';
+}
+
 $(document).ready(function() {
+    createDots();
+    setInterval(moveDots, 10);
     setInterval(updateDebug, 10);
-    setInterval(moveGhost, 10);
+    setInterval(moveElements, 10);
     setInterval(faceDirection, 10);
 
     if($ghostPresent == false) {
