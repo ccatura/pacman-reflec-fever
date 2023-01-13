@@ -1,5 +1,5 @@
 :root {
-    --debug-borders: 0px;
+    --debug-borders: 1px;
     --background-color: #111;
     --background-play-color: black;
     --body-copy-color: white;
@@ -210,7 +210,7 @@ body {
 .dot-container {
     width: 500px;
     height: 30px;
-    border: var(--debug-borders) dotted red;
+    /* border: var(--debug-borders) dotted red; */
     position: absolute;
     top: 45%;
     left: 0;
