@@ -115,6 +115,8 @@ function updateDebug() {
     $('#debug #ghost-side').text('Ghost Side: ' + $ghostSide);
     $('#debug #dead').text('Pacman Dead: ' + $dead);
     $('#debug #ghost-name').text('Ghost: ' + $ghostName);
+    $('#debug #dot-container-offset').text('Dot Offset: ' + $dotContainerOffset);
+    $('#debug #dot-distance').text('Dot Distance: ' + parseInt($dotDistance));
     $('#score').text($score);
 }
 
@@ -215,12 +217,18 @@ function createDots() {
 }
 
 function moveDots() {
-    if($dotContainerOffset <= $dotDistance) {
-        $dotContainerOffset+= $dotSpeed;
-    } else {
-        $dotContainerOffset = 0;
+    if($gameStarted) {
+        if(Math.abs($dotContainerOffset) <= $dotDistance) {
+                $dotContainerOffset += $dotSpeed;
+        } else {
+            $dotContainerOffset = 0;
+        }
     }
-    $dotContainer.style.transform = 'translateX(' + $dotContainerOffset + 'px)';
+    if($pacmanDirection == "left") {
+        $dotContainer.style.transform = 'translateX(' + $dotContainerOffset + 'px)';
+    } else {
+        $dotContainer.style.transform = 'translateX(-' + $dotContainerOffset + 'px)';
+    }
 }
 
 $(document).ready(function() {
